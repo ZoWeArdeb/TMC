@@ -19,7 +19,7 @@
                     {{ method_field('PUT') }}
                     {{ csrf_field() }}
                     <div class="form-group">
-                        <label>Aantal Teams</label>
+                        <label>Aantal teams</label>
                         <input type="number" class="form-control" name="teams" value="{{ old('teams', $settings->get('teams')) }}" />
                     </div>
 
@@ -29,15 +29,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Eindronde</label>
-                        <select class="form-control" name="final_stages">
-                            <option value="">-- Selecteer --</option>
-                            <option value="2" @if (old('final_stages', $settings->get('final_stages')) == 2) selected @endif>Finale</option>
-                            <option value="4" @if (old('final_stages', $settings->get('final_stages')) == 4) selected @endif>Halve finale</option>
-                            <option value="8" @if (old('final_stages', $settings->get('final_stages')) == 8) selected @endif>Kwartfinale</option>
-                            <option value="16" @if (old('final_stages', $settings->get('final_stages')) == 16) selected @endif>1/8 finale</option>
-                            <option value="32" @if (old('final_stages', $settings->get('final_stages')) == 32) selected @endif>1/16 finale</option>
-                        </select>
+                        <label>Aantal teams die doorgaan naar volgende ronde</label>
+                        <input type="number" class="form-control" name="qualifiedteams" value="{{ old('groups', $settings->get('qualifiedteams')) }}" />
+                    </div>
+
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            Volgende ronde is KO?
+                            <input type="checkbox" class="form-check-input" name="isKO" @if (old('isKO', $settings->get('isKO'))) selected @endif >
+                        </label>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save</button>

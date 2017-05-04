@@ -105,7 +105,8 @@ class TournamentController extends Controller
         $rules = collect([
             'teams'  => 'required|numeric',
             'groups' => 'required|numeric',
-            'final_stages' => 'required|numeric'
+            'qualifiedteams' => 'required|numeric',
+            'isKO' => 'required'
         ]);
 
         $validator = validator(request()->all(), $rules->toArray());
@@ -117,9 +118,10 @@ class TournamentController extends Controller
         $settings = collect();
         $settings->put('teams', intval(request('teams')))
             ->put('groups', intval(request('groups')))
-            ->put('final_stages', intval(request('final_stages')));
+            ->put('qualifiedteams', intval(request('qualifiedteams')))
+            ->put('isKO', intval(request('isKO')));
 
-        $item           = Tournament::find($id);
+        $item = Tournament::find($id);
         $item->settings = $settings;
         $item->save();
 

@@ -16,6 +16,7 @@ class CreateTeamTable extends Migration
         Schema::create('tournament', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->text('settings')->nullable();
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
             $table->timestamps();
@@ -25,21 +26,14 @@ class CreateTeamTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('tournament_id')->unsigned()->unique();
-            $table->integer('NumberTeams');
-            $table->integer('TeamsInGroups');
-            $table->integer('TeamsNextRound');
-            $table->boolean('NextRoundKO');
             $table->integer('parent')->nullable()->unsigned(); 
             $table->timestamps();
         });
 
         Schema::table('league', function (Blueprint $table) { 
             $table->foreign('parent')->references('id')->on('league'); 
-        }); 
-
-        Schema::table('league', function (Blueprint $table) {
             $table->foreign('tournament_id')->references('id')->on('tournament');
-        });
+        }); 
 
         Schema::create('team', function (Blueprint $table) {
             $table->increments('id');
