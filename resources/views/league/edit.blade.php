@@ -20,11 +20,6 @@
                         <input type="text" class="form-control" name="name" value="{{ old('name', $league->name) }}" />
                     </div>
 
-                    <div class="form-group">
-                        <label>Code</label>
-                        <input type="text" class="form-control" name="code" value="{{ old('code', $league->code) }}" />
-                    </div>
-
                     <button type="submit" class="btn btn-primary">Update</button>
                     <a href="{{ $linkBack }}" class="btn btn-default">Back</a>
 

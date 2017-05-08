@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Tournament Settings</h1>
+                <h1>League Settings</h1>
 
                 <ul>
                     @foreach($errors->all() as $error)
@@ -15,7 +15,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <form method="post" action="{{ url()->route('tournamentSettingsStore', ['id' => $id]) }}">
+                <form method="post" action="{{ url()->route('leagueSettingsStore', ['tournament' => $tournamentid, 'league' => $id]) }}">
                     {{ method_field('PUT') }}
                     {{ csrf_field() }}
                     <div class="form-group">
@@ -30,7 +30,7 @@
 
                     <div class="form-group">
                         <label>Aantal teams die doorgaan naar volgende ronde</label>
-                        <input type="number" class="form-control" name="qualifiedteams" value="{{ old('groups', $settings->get('qualifiedteams')) }}" />
+                        <input type="number" class="form-control" name="qualifiedteams" value="{{ old('qualifiedteams', $settings->get('qualifiedteams')) }}" />
                     </div>
 
                     <div class="form-check">

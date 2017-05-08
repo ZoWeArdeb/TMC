@@ -11,7 +11,7 @@
                     @endforeach
                 </ul>
 
-                <form method="post" action="{{ url()->route('teamStore') }}">
+                <form method="post" action="{{ url()->route('teamStore', array('tournament' => $tournament)) }}">
                     {{ csrf_field() }}
 
                     <div class="form-group">
@@ -20,12 +20,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Code</label>
-                        <input type="text" class="form-control" name="code" value="{{ old('code') }}" />
+                        <label>League</label>
+                          <select class="form-control" name="league">
+                            @foreach($tournament->leagues as $league)
+                              <option value="{{$league->id}}">{{$league->name}}</option>
+                            @endforeach
+                          </select>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save</button>
-                    <a href="#" class="btn btn-default">Back</a>
+                    <a href="{{ $linkBack }}" class="btn btn-default">Back</a>
 
                 </form>
             </div>

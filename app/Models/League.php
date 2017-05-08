@@ -11,7 +11,7 @@ class League extends Model
 {
     protected $table = 'league';
 
-    protected $fillable = array('name', 'code');
+    protected $fillable = array('name');
 
     public function tournament()
     {
@@ -56,6 +56,14 @@ class League extends Model
         })->sortByDesc('points')->values();
 
         return $ranking;
+    }
+
+    public function getSettingsAttribute($value) {
+        return collect(json_decode($value));
+    }
+
+    public function setSettingsAttribute($value) {
+        $this->attributes['settings'] = json_encode($value);
     }
 
 }

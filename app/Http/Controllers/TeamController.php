@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team;
+use App\Models\Tournament;
 use App\Repositories\Contracts\TeamRepositoryInterface;
 
 class TeamController extends Controller
@@ -15,37 +16,42 @@ class TeamController extends Controller
         $this->teamRepository = $teamRepository;
     }
 
-    public function index()
-    {
+    public function index(Tournament $tournament)
+    {        
+        $linkBack = route('tournamentShow', array(
+            'tournament' => $tournament
+        ));
         $teams = $this->teamRepository->getAll();
-        return view('team.index', compact('teams'));
+        return view('team.index', compact('teams', 'tournament', 'linkBack'));
     }
 
-    public function create()
+    public function create(Tournament $tournament)
     {
-        return view('team.create');
+        $linkBack = route('teams', array(
+            'tournament' => $tournament
+        ));
+        return view('team.create', compact('tournament', 'linkBack'));
     }
 
-    public function store()
+    public function store(Tournament $tournament)
     {
         $rules = collect([
-            'code' => 'required',
+            'league' => 'required',
             'name' => 'required'
         ]);
-
         $validator = validator(request()->all(), $rules->toArray());
         if ($validator->fails()) {
-            return redirect()->route('teamCreate')->withErrors($validator)->withInput(request()->except('password'));
+            return redirect()->route('teamCreate', array('tournament' => $tournament))->withErrors($validator)->withInput(request()->except('password'));
         }
 
         $item = new Team(array(
             'name' => request('name'),
-            'code' => request('code')
+            'league_id' => request('league')
         ));
-        $item->save();
 
+        $item->save();
         session('message', 'Successfully created team');
-        return redirect()->route('teams');
+        return redirect()->route('teams',array('tournament' => $tournament));
     }
 
     public function show(Team $team)
@@ -61,7 +67,7 @@ class TeamController extends Controller
     public function update(Team $team)
     {
         $rules = collect([
-            'code' => 'required',
+            'league' => 'required',
             'name' => 'required'
         ]);
 
@@ -71,7 +77,7 @@ class TeamController extends Controller
         }
 
         $team->name = request('name');
-        $team->code = request('code');
+        $team->code = request('league');
         $team->save();
 
         session('message', 'Successfully updated team');

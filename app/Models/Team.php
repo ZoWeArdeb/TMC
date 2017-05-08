@@ -10,7 +10,7 @@ class Team extends Model
 {
     protected $table = 'team';
 
-    protected $fillable = array('name', 'code');
+    protected $fillable = array('name','league_id');
 
     public function homeGames()
     {

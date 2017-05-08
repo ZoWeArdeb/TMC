@@ -27,7 +27,6 @@ class LeagueController extends Controller
     public function store(Tournament $tournament)
     {
         $rules = collect([
-            'code' => 'required',
             'name' => 'required'
         ]);
 
@@ -38,7 +37,6 @@ class LeagueController extends Controller
 
         $item = new League();
         $item->name = request('name');
-        $item->code = request('code');
         $item->tournament_id = $tournament->id;
         $item->save();
 
@@ -65,7 +63,6 @@ class LeagueController extends Controller
     public function update(Tournament $tournament, League $league)
     {
         $rules = collect([
-            'code' => 'required',
             'name' => 'required'
         ]);
 
@@ -75,7 +72,6 @@ class LeagueController extends Controller
         }
 
         $league->name = request('name');
-        $league->code = request('code');
         $league->tournament_id = $tournament->id;
         $league->save();
 
@@ -89,5 +85,47 @@ class LeagueController extends Controller
 
         session('message', 'Successfully deleted league');
         return redirect()->route('leagues', array('tournament' => $tournament));
+    }
+
+     public function settings(Tournament $tournament, League $league)
+    {
+        $settings = $league->settings;
+        $id = $league->id;
+        $tournamentid = $tournament->id;
+        $linkBack = route('leagues', array(
+            'tournament' => $tournament
+        ));
+        return view('league.settings', compact('id', 'tournamentid', 'settings', 'linkBack'));
+    }
+
+    public function storeSettings($id)
+    {
+        $rules = collect([
+            'teams'  => 'required|numeric',
+            'groups' => 'required|numeric',
+            'qualifiedteams' => 'required|numeric',
+            'isKO' => 'required'
+        ]);
+
+        $validator = validator(request()->all(), $rules->toArray());
+        if ($validator->fails()) {
+            return redirect()->route('leagueSettings',
+                ['id' => $id])->withErrors($validator)->withInput(request()->except('password'));
+        }
+
+        $settings = collect();
+        $settings->put('teams', intval(request('teams')))
+            ->put('groups', intval(request('groups')))
+            ->put('qualifiedteams', intval(request('qualifiedteams')))
+            ->put('isKO', intval(request('isKO')));
+
+        $item = League::find($id);
+        $item->settings = $settings;
+        $item->save();
+
+        session()->flash('message', 'Successfully saved league settings');
+        return redirect()->route('leagues', array(
+             'tournament' => $item->tournament_id
+        ));
     }
 }

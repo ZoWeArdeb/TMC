@@ -18,12 +18,6 @@
                         <label>Name</label>
                         <input type="text" class="form-control" name="name" value="{{ old('name') }}" />
                     </div>
-
-                    <div class="form-group">
-                        <label>Code</label>
-                        <input type="text" class="form-control" name="code" value="{{ old('code') }}" />
-                    </div>
-
                     <button type="submit" class="btn btn-primary">Save</button>
                     <a href="{{ $linkBack }}" class="btn btn-default">Back</a>
 

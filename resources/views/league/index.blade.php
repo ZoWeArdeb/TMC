@@ -11,6 +11,7 @@
                         <li class="list-group-item">
                             <a href="{{ url()->route('leagueShow', ['tournament' => $tournament, 'league' => $league]) }}">{{ $league->name }}</a> /
                             <a href="{{ url()->route('leagueEdit', ['tournament' => $tournament, 'league' => $league]) }}">Edit</a> /
+                            <a href="{{ url()->route('leagueSettings', ['tournament' => $tournament, 'league' => $league]) }}">Settings</a> /
                             <form method="post" action="{{ url()->route('leagueDelete', ['tournament' => $tournament, 'league' => $league]) }}">
                                 {{ method_field('DELETE') }}
                                 {{ csrf_field() }}

@@ -15,22 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/** TEAMS */
-Route::group(['prefix' => 'team'], function() {
-
-    Route::get('', 'TeamController@index')->name('teams');
-    Route::get('create', 'TeamController@create')->name('teamCreate');
-    Route::post('', 'TeamController@store')->name('teamStore');
-    Route::get('{team}', 'TeamController@show')->name('teamShow');
-    Route::get('{team}/edit', 'TeamController@edit')->name('teamEdit');
-    Route::patch('{team}', 'TeamController@update')->name('teamUpdate');
-    Route::delete('{team}', 'TeamController@destroy')->name('teamDelete');
-
-});
-
 /** COMPETITIONS */
 Route::group(['prefix' => 'competition'], function() {
-
     Route::get('', 'CompetitionController@index')->name('competitions');
     Route::get('create', 'CompetitionController@create')->name('competitionCreate');
     Route::post('', 'CompetitionController@store')->name('competitionStore');
@@ -58,7 +44,7 @@ Route::group(['prefix' => 'game'], function() {
 });
 
 
-
+/** TOURNAMENTS */
 Route::group(['prefix' => 'tournament'], function() {
 
     Route::get('', 'TournamentController@index')->name('tournaments');
@@ -86,6 +72,22 @@ Route::group(['prefix' => 'tournament'], function() {
         Route::patch('{league}', 'LeagueController@update')->name('leagueUpdate');
         Route::delete('{league}', 'LeagueController@destroy')->name('leagueDelete');
 
+        Route::get('{league}/settings', 'LeagueController@settings')->name('leagueSettings');
+        Route::put('{league}/settings', 'LeagueController@storeSettings')->name('leagueSettingsStore');
+
+    });
+
+        /** TEAMS */
+    Route::group(['prefix' => '{tournament}/team'], function() {
+
+        Route::get('', 'TeamController@index')->name('teams');
+        Route::get('create', 'TeamController@create')->name('teamCreate');
+        Route::post('', 'TeamController@store')->name('teamStore');
+        Route::get('{team}', 'TeamController@show')->name('teamShow');
+        Route::get('{team}/edit', 'TeamController@edit')->name('teamEdit');
+        Route::patch('{team}', 'TeamController@update')->name('teamUpdate');
+        Route::delete('{team}', 'TeamController@destroy')->name('teamDelete');
+
     });
 
     Route::group(['namespace' => 'Hulp'], function () {
@@ -107,6 +109,7 @@ Route::group(['prefix' => 'tournament'], function() {
     });
 
 });
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
