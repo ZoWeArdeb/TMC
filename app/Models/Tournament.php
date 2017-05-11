@@ -16,11 +16,6 @@ class Tournament extends Model
         'end_date'
     );
 
-    public function teams()
-    {
-        return $this->hasMany(Team::class, 'tournament_id');
-    }
-
     public function leagues()
     {
         return $this->hasMany(League::class, 'tournament_id');

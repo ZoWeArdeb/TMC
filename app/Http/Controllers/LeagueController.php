@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\League;
 use App\Models\Tournament;
+use App\Models\Team;
 
 class LeagueController extends Controller
 {
@@ -46,10 +47,47 @@ class LeagueController extends Controller
 
     public function show(Tournament $tournament, League $league)
     {
+                /** @var Collection $settings */
+        $settings = $league->settings;
+        $setup = collect();
+
+        $teamsPerGroup = intval(floor($settings->get('teams') / $settings->get('groups')));
+        $rest = $settings->get('teams') % $settings->get('groups');
+
+        $leagueteams = $league->teams()->get()->shuffle();
+        $countleagueteams = count($leagueteams);
+        $leagueitems = 0;
+        for($x = 0; $x < $settings->get('groups'); $x++) {
+            $group = collect();
+            for($y = 1; $y <= $teamsPerGroup; $y++) {
+                if($teamsPerGroup * $x + $y > $countleagueteams)
+                {
+                    $randomteam = new Team();
+                    $randomteam->name = 'Team ' . ($teamsPerGroup * $x + $y);
+                    $randomteam->id = 0;
+                    $group->push($randomteam);
+                }
+                else
+                {
+                    $group->push($leagueteams[$leagueitems]);
+                    $leagueitems++;
+                }
+            }
+            $setup->push($group);
+        }
+
+        for($i = 0; $i < $rest; $i++) {
+            $setup->get($i)->push('Team ' . ($teamsPerGroup * $settings->get('groups') + $i + 1));
+        }
+
+        $winnersPerGroup = floor($settings->get('final_stages') / $settings->get('groups'));
+
         $linkBack = route('leagues', array(
             'tournament' => $tournament
         ));
-        return view('league.show', compact('tournament', 'league', 'linkBack'));
+        $teams = $league->teams();
+
+        return view('league.show', compact('tournament', 'league','setup', 'linkBack'));
     }
 
     public function edit(Tournament $tournament, League $league)
@@ -98,7 +136,7 @@ class LeagueController extends Controller
         return view('league.settings', compact('id', 'tournamentid', 'settings', 'linkBack'));
     }
 
-    public function storeSettings($id)
+    public function storeSettings(Tournament $tournament, League $league)
     {
         $rules = collect([
             'teams'  => 'required|numeric',
@@ -117,9 +155,8 @@ class LeagueController extends Controller
         $settings->put('teams', intval(request('teams')))
             ->put('groups', intval(request('groups')))
             ->put('qualifiedteams', intval(request('qualifiedteams')))
-            ->put('isKO', intval(request('isKO')));
-
-        $item = League::find($id);
+            ->put('isKO', boolval(request('isKO')));
+        $item = League::find($league->id);
         $item->settings = $settings;
         $item->save();
 

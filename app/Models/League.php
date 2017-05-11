@@ -18,6 +18,11 @@ class League extends Model
         return $this->belongsTo(Tournament::class, 'tournament_id');
     }
 
+    public function teams()
+    {
+        return $this->hasMany(Team::class, 'league_id');
+    }
+
     public function games()
     {
         return $this->hasMany(Game::class, 'league_id')->with('home', 'away');

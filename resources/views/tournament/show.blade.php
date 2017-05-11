@@ -16,9 +16,8 @@
             <div class="col-md-12">
                 <h1>Tournament Show</h1>
                 <h2>{{ $item->name }}</h2>
-                <a href="{{ url()->route('tournamentPreview', array('tournament' => $item)) }}" class="btn btn-primary">Preview</a>
-                <a href="{{ url()->route('teams', array('tournament' => $item)) }}" class="btn btn-primary">Teams</a>
                 <a href="{{ url()->route('leagues', array('tournament' => $item)) }}" class="btn btn-primary">Leagues</a>
+                <a href="{{ url()->route('teams', array('tournament' => $item)) }}" class="btn btn-primary">Teams</a>
                 <a href="{{ url()->route('games', array('tournament' => $item)) }}" class="btn btn-primary">Games</a>
                 <a href="{{ url()->route('tournamentRanking', array('tournament' => $item)) }}" class="btn btn-primary">Ranking</a>
 
